@@ -73,9 +73,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.matzipapp"
+    namespace "com.cheongmaru.app"
     defaultConfig {
-        applicationId "com.matzipapp"
+        applicationId "com.cheongmaru.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -1,4 +1,4 @@
-package com.matzipapp;
+package com.cheongmaru.app;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

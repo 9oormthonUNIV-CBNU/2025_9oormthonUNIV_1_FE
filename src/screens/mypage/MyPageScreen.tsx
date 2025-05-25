@@ -4,7 +4,7 @@ import {StyleSheet, Text, View} from 'react-native';
 function CalendarHomeScreen() {
   return (
     <View>
-      <Text>캘린더</Text>
+      <Text>mypage</Text>
     </View>
   );
 }

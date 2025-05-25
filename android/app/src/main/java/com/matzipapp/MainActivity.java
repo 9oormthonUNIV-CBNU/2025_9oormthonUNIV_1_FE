@@ -1,4 +1,4 @@
-package com.matzipapp;
+package com.cheongmaru.app;
 
 import com.facebook.react.ReactActivity;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "MatzipApp";
+    return "cheongmaru";
   }
 
   /**

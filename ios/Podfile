@@ -5,7 +5,8 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-platform :ios, min_ios_version_supported
+
+platform :ios, '14'
 prepare_react_native_project!
 
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
@@ -25,7 +26,9 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'MatzipApp' do
+target 'cheongmaru' do
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-maps/Google', :path => rn_maps_path
   config = use_native_modules!
 
   # Flags change depending on the env values.
@@ -45,10 +48,12 @@ target 'MatzipApp' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'MatzipAppTests' do
+  target 'cheongmaruTest' do
     inherit! :complete
     # Pods for testing
   end
+
+  
 
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202

@@ -1,0 +1,19 @@
+import React from 'react';
+import {createStackNavigator} from '@react-navigation/stack';
+import MainTabNavigator from '../tab/MainTabNavigator';
+
+const Stack = createStackNavigator();
+
+function MainStackNavigator() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="MainTabs"
+        component={MainTabNavigator}
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
+  );
+}
+
+export default MainStackNavigator;
