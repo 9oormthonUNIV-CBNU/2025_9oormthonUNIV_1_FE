@@ -3,9 +3,17 @@ const authNaviagtions = {
   AUTH_LOC: 'AuthLoc',
 } as const;
 
-const mainNavigations = {
-  MAP: 'Map',
+const mapNavigations = {
+  MAP_HOME: 'MapHome',
+  MAP_INFO: 'MapInfo',
+} as const;
+
+const postNavigations = {
+  POST_HOME: 'PostList',
+  POST_PAGE: 'PostPage',
+  POST_CREATE: 'PostCreate',
 } as const;
 
 export {authNaviagtions};
-export {mainNavigations};
+export {mapNavigations};
+export {postNavigations};

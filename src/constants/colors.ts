@@ -11,6 +11,7 @@ const colors = {
   WHITE: '#FFF',
   BLACK: '#222222',
   KAKAO_YELLOW: '#FFE733',
+  BLUE_400: '#0095FF',
 };
 
 export {colors};

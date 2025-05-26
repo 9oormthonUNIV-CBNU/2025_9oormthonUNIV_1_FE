@@ -1,5 +1,5 @@
 import React from 'react';
-import MainBottomNavigator from '../stack/MainStackNavigator.js';
+import MainBottomNavigator from '../stack/RootStackNavigator.js';
 import AuthStackNavigator from '../stack/AuthStackNavigator.js';
 import useAuth from '@/hooks/queries/useAuth';
 

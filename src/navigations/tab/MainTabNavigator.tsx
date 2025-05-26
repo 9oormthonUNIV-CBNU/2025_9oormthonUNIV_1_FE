@@ -5,6 +5,8 @@ import MapHomeScreen from '@/screens/map/MapHomeScreen';
 import PostHomeScreen from '@/screens/post/PostHomeScreen';
 import MyPageScreen from '@/screens/mypage/MyPageScreen';
 import {colors} from '@/constants/colors';
+import MapStackNavigator from '../stack/MapStackNavigator';
+import PostStackNavigator from '../stack/PostStackNavigator';
 
 const Tab = createBottomTabNavigator();
 const TAB_ICON_SIZE = 32; // 아이콘 크기 설정
@@ -12,7 +14,7 @@ const screenOptions = {
   headerShown: false,
   tabBarStyle: {
     paddingVertical: 16,
-    height: '12%',
+    height: `12%`,
     backgroundColor: colors.WHITE,
     elevation: 0,
   },
@@ -30,7 +32,7 @@ function MainTabNavigator() {
     <Tab.Navigator screenOptions={screenOptions}>
       <Tab.Screen
         name="Map"
-        component={MapHomeScreen}
+        component={MapStackNavigator}
         options={{
           tabBarIcon: ({focused}) => (
             <Image
@@ -47,7 +49,7 @@ function MainTabNavigator() {
       />
       <Tab.Screen
         name="post"
-        component={PostHomeScreen}
+        component={PostStackNavigator}
         options={{
           tabBarIcon: ({focused}) => (
             <Image

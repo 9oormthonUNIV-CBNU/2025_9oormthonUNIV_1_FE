@@ -4,16 +4,12 @@ import MainTabNavigator from '../tab/MainTabNavigator';
 
 const Stack = createStackNavigator();
 
-function MainStackNavigator() {
+function RootNavigator() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="MainTabs"
-        component={MainTabNavigator}
-        options={{headerShown: false}}
-      />
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="MainTabs" component={MainTabNavigator} />
     </Stack.Navigator>
   );
 }
 
-export default MainStackNavigator;
+export default RootNavigator;

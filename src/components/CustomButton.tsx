@@ -4,7 +4,7 @@ import {
   StyleSheet,
   Text,
   PressableProps,
-  Dimensions,
+  Dimensions,onPress={() => navigation.navigate(authNaviagtions.AUTH_LOC)}
   View,
 } from 'react-native';
 
