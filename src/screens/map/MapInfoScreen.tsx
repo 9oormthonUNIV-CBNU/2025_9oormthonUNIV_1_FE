@@ -4,6 +4,7 @@ import React from 'react';
 import {
   View,
   Text,
+  Image,
   StyleSheet,
   Linking,
   ScrollView,
@@ -11,7 +12,8 @@ import {
 } from 'react-native';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
-import type {RootStackParamList} from '@/navigations/stack/types'; // 네비게이션 타입 정의 파일
+import type {RootStackParamList} from '@/constants';
+import {colors} from '@/constants';
 
 type MapInfoScreenRouteProp = RouteProp<RootStackParamList, 'MapInfoScreen'>;
 
@@ -21,41 +23,71 @@ const MapInfoScreen: React.FC = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>{marker?.name || '장소명 미지정'}</Text>
-
-      <View style={styles.section}>
-        <Text style={styles.label}>주소</Text>
-        <Text style={styles.value}>{marker?.address || '주소 정보 없음'}</Text>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.label}>태그</Text>
-        <Text style={styles.value}>
-          {marker?.tags?.join(', ') || '태그 없음'}
+      <View style={styles.header}>
+        <Text style={styles.name}>{marker?.name || '장소명 미지정'}</Text>
+        <Text style={styles.address}>
+          {marker?.address || '주소 정보 없음'}
         </Text>
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.label}>이용시간</Text>
-        <Text style={styles.value}>{marker?.hours || '이용시간 정보 없음'}</Text>
+      <View style={styles.tagsContainer}>
+        {(marker.tags ?? []).map(tag => (
+          <Text key={tag} style={styles.tag}>
+            {tag}
+          </Text>
+        ))}
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.label}>수용 인원</Text>
-        <Text style={styles.value}>
-          {marker?.capacity ? `${marker.capacity}명` : '정보 없음'}
-        </Text>
+      <View style={styles.infoWrapper}>
+        {[
+          {
+            key: 'time',
+            label: '이용시간',
+            value: marker?.hours || '주소 정보 없음',
+          },
+          {
+            key: 'capacity',
+            label: '수용인원',
+            value: marker?.capacity || '주소 정보 없음',
+          },
+          {
+            key: 'website',
+            label: '웹사이트',
+            value: marker?.website || null,
+          },
+        ].map((item, index, arr) => (
+          <View
+            key={item.key}
+            style={[
+              styles.infoContainer,
+              index === arr.length - 1 && {
+                borderBottomWidth: 1,
+                borderColor: colors.GRAY_400,
+              },
+            ]}>
+            <Image
+              style={styles.iconimage}
+              source={require('@/assets/icons/time.png')}
+            />
+            <Text style={styles.label}>{item.label}</Text>
+
+            {item.key === 'website' ? (
+              item.value ? (
+                <TouchableOpacity onPress={() => Linking.openURL(item.value)}>
+                  <Text style={[styles.value, styles.link]}>{item.value}</Text>
+                </TouchableOpacity>
+              ) : (
+                <Text style={styles.value}>웹사이트 정보 없음</Text>
+              )
+            ) : (
+              <Text style={styles.value}>{item.value}</Text>
+            )}
+          </View>
+        ))}
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.label}>웹사이트</Text>
-        {marker?.website ? (
-          <TouchableOpacity onPress={() => Linking.openURL(marker.website)}>
-            <Text style={[styles.value, styles.link]}>{marker.website}</Text>
-          </TouchableOpacity>
-        ) : (
-          <Text style={styles.value}>웹사이트 정보 없음</Text>
-        )}
+      <View style={styles.desContainer}>
+        <Text style={styles.value}>{marker?.describe || '설명 정보 없음'}</Text>
       </View>
     </ScrollView>
   );
@@ -63,30 +95,76 @@ const MapInfoScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    backgroundColor: '#fff',
+    padding: 24,
+    paddingBottom: 60,
+    backgroundColor: colors.WHITE,
+    gap: 50,
   },
-  title: {
+  header: {
+    gap: 10,
+  },
+  name: {
     fontSize: 24,
+    color: colors.BLACK,
     fontWeight: 'bold',
-    marginBottom: 20,
   },
-  section: {
-    marginBottom: 15,
+  address: {
+    fontSize: 16,
+    color: colors.GRAY_800,
+    marginBottom: 10,
   },
+
+  tagsContainer: {flexDirection: 'row'},
+  tag: {
+    fontSize: 12,
+    borderBottomWidth: 0.8,
+    color: colors.BLUE_400,
+    borderColor: colors.BLUE_400,
+    borderWidth: 1,
+    borderRadius: 4,
+    paddingVertical: 2,
+    paddingHorizontal: 8,
+    marginRight: 8,
+  },
+
+  infoWrapper: {
+    justifyContent: 'space-between',
+    overflow: 'hidden',
+  },
+  infoContainer: {
+    flexDirection: 'row',
+    gap: 12,
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderColor: colors.GRAY_400,
+    paddingVertical: 10,
+  },
+  iconimage: {
+    width: 16,
+    height: 16,
+    resizeMode: 'contain',
+    marginRight: -4,
+  },
+
   label: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#555',
-    marginBottom: 5,
+    fontWeight: '700',
+    color: colors.BLACK,
   },
   value: {
     fontSize: 16,
-    color: '#333',
+    fontWeight: '400',
+    color: colors.BLACK,
   },
   link: {
-    color: '#1e90ff',
+    color: colors.BLUE_400,
     textDecorationLine: 'underline',
+  },
+
+  desContainer: {
+    backgroundColor: colors.GRAY_200,
+    padding: 20,
+    borderRadius: 20,
   },
 });
 

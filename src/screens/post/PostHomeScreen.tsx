@@ -21,7 +21,7 @@ const posts = [
   {
     id: 2,
     tags: ['공부'],
-    title: '충북대생 모여라~',
+    title: '충북대생 모여라~2',
     content: '학교 근처에서 스터디 할 인원 구합니다. 최대...',
     imageUrl: undefined,
     likes: 10,

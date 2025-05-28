@@ -18,12 +18,14 @@ const coordinates = [
   {
     latitude: 37.5765,
     longitude: 126.978,
-    name: 'Marker 1',
-    address: 'Address 1',
-    tags: ['tag1', 'tag2'],
-    hours: '9:00-18:00',
-    capacity: 10,
-    website: 'https://example1.com',
+    name: '충북청년희망센터',
+    address: '상당구 사북로 164 대우타워아파트 5층',
+    tags: ['공유오피스', '청년지원기관관'],
+    hours: '월-금 10:00~21:00 / 토 10:00~16:00',
+    capacity: '2~6명 / 10~25명',
+    website: 'https://www.cbhope1539.net/index.do',
+    describe:
+      '충북청년희망센터는 청년들의 창업과 취업을 지원하는 공간으로, 다양한 프로그램과 시설을 제공합니다.',
   },
   {
     latitude: 37.5615,
