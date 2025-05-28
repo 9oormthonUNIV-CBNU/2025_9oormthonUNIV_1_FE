@@ -1,17 +1,15 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from '@/constants/colors';
 import KakaoMapView from '@/components/KakaoMapView';
 import CustomButton from '@/components/CustomButton';
-import {useCurrentLocation} from '@/hooks/useCurrentLocation';
+import useCurrentLocation from '@/hooks/useCurrentLocation';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 
 function AuthLocationScreen() {
-  const location = useCurrentLocation(); // 위치 상태
-  const [regionName, setRegionName] = useState('');
-
-  // 위치 정보 콘솔 출력
-  console.log('AuthLocationScreen:', location);
+  const {userLocation, isUserLocationError} = useCurrentLocation();
+  const mapRef = useRef<MapView | null>(null);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -20,19 +18,23 @@ function AuthLocationScreen() {
         <Text>청마루 이용을 위해서는 청주시 위치 인증이 필요해요</Text>
       </View>
       <View style={styles.mapContainer}>
-        <View style={{height: '80%'}}>
-          {/* 위치 정보 화면에 출력 */}
-          <View
-            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text>{location ? '' : '위치 정보를 불러오는 중...'}</Text>
-          </View>
-          {location && (
-            <KakaoMapView
-              latitude={location.latitude}
-              longitude={location.longitude}
-            />
-          )}
-        </View>
+        <MapView
+          ref={mapRef}
+          style={styles.container}
+          provider={PROVIDER_GOOGLE}
+          showsUserLocation
+          followsUserLocation
+          showsMyLocationButton={false}
+          initialRegion={
+            userLocation
+              ? {
+                  latitude: userLocation.latitude,
+                  longitude: userLocation.longitude,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421,
+                }
+              : undefined
+          }></MapView>
         <View style={styles.locContainer}>
           <Text style={styles.h3}>현재 나의 위치는 </Text>
           <Text style={styles.locText}>“청주시 서원구”</Text>

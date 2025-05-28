@@ -3,7 +3,7 @@ import {LatLng} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import useAppState from './useAppState';
 
-function useUserLocation() {
+function useCurrentLocation() {
   const [userLocation, setUserLocation] = useState<LatLng>({
     latitude: 37.5516032365118,
     longitude: 126.98989626020192,
@@ -32,4 +32,4 @@ function useUserLocation() {
   return {userLocation, isUserLocationError};
 }
 
-export default useUserLocation;
+export default useCurrentLocation;

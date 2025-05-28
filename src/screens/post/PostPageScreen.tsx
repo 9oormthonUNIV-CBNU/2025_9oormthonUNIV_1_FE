@@ -2,6 +2,8 @@ import React from 'react';
 import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import PostStats from '@/components/PostStats';
+import {colors} from '@/constants';
 
 // Post 타입 정의
 type Post = {
@@ -61,37 +63,46 @@ function PostPageScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.header}>
-          <Text style={styles.title}>{post.title}</Text>
-          <View style={styles.tagsContainer}>
-            {(post.tags ?? []).map(tag => (
-              <Text key={tag} style={styles.tag}>
-                {tag}
-              </Text>
-            ))}
-          </View>
-        </View>
+    <SafeAreaView style={{flex: 1}}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>{post.title}</Text>
+
         {post.imageUrl && (
           <Image source={{uri: post.imageUrl}} style={styles.image} />
         )}
         <Text style={styles.content}>{post.content}</Text>
-        <View style={styles.statsContainer}>
-          <Text style={styles.stat}>👍 {post.likes}</Text>
-          <Text style={styles.stat}>💬 {post.comments}</Text>
-          <Text style={styles.stat}>👁️ {post.views}</Text>
+        <View style={styles.tagsContainer}>
+          {(post.tags ?? []).map(tag => (
+            <Text key={tag} style={styles.tag}>
+              {tag}
+            </Text>
+          ))}
         </View>
+        <PostStats
+          likes={post.likes}
+          comments={post.comments}
+          views={post.views}
+        />
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff'},
-  header: {margin: 20},
-  title: {fontSize: 24, fontWeight: 'bold', marginBottom: 8},
-  tagsContainer: {flexDirection: 'row', marginBottom: 8},
+  container: {
+    flex: 1,
+    backgroundColor: colors.WHITE,
+    padding: 24,
+    flexDirection: 'column',
+    gap: 20,
+  },
+  header: {},
+  title: {
+    color: colors.BLACK,
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  tagsContainer: {flexDirection: 'row'},
   tag: {
     borderColor: '#2196f3',
     borderWidth: 1,
@@ -106,10 +117,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 200,
     borderRadius: 8,
-    marginBottom: 12,
   },
-  content: {fontSize: 16, color: '#333', margin: 20},
-  statsContainer: {flexDirection: 'row', marginLeft: 20, marginTop: 12},
+  content: {fontSize: 16, color: colors.BLACK},
   stat: {fontSize: 14, color: '#555', marginRight: 16},
 });
 

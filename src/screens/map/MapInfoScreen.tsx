@@ -12,10 +12,9 @@ import {
 } from 'react-native';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
-import type {RootStackParamList} from '@/constants';
-import {colors} from '@/constants';
+import {colors, mapNavigations, RootStackParamList} from '@/constants';
 
-type MapInfoScreenRouteProp = RouteProp<RootStackParamList, 'MapInfoScreen'>;
+type MapInfoScreenRouteProp = RouteProp<RootStackParamList, 'MapInfo'>;
 
 const MapInfoScreen: React.FC = () => {
   const route = useRoute<MapInfoScreenRouteProp>();
@@ -95,7 +94,7 @@ const MapInfoScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 24,
+    padding: 28,
     paddingBottom: 60,
     backgroundColor: colors.WHITE,
     gap: 50,

@@ -1,6 +1,5 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
-import PostList from '@/components/PostList';
 import {colors} from '@/constants/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PostListItem from '@/components/PostListItem';

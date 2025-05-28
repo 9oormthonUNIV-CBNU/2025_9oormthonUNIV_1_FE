@@ -5,16 +5,15 @@ import {StyleSheet, View, Image, Text} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation, NavigationProp} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import MapView from 'react-native-maps';
 import useAuth from '@/hooks/queries/useAuth';
-import useUserLocation from '@/hooks/useCurrentLocation';
-import {colors} from '@/constants/colors';
-import {AuthStackParamList} from '@/navigations/stack/AuthStackNavigator';
-import {mapNavigations} from '@/constants';
+import useCurrentLocation from '@/hooks/useCurrentLocation';
+import {colors, mapNavigations, MarkerType} from '@/constants';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
+import GoogleMapView from '@/components/GoogleMapView';
 
 // 예시마커
-const coordinates = [
+const Markers = [
   {
     latitude: 37.5765,
     longitude: 126.978,
@@ -50,11 +49,10 @@ const coordinates = [
 ];
 
 function MapHomeScreen() {
-  const inset = useSafeAreaInsets();
   const {logoutMutation} = useAuth();
   const navigation = useNavigation<NavigationProp<MapStackParamList>>();
   const mapRef = useRef<MapView | null>(null);
-  const {userLocation, isUserLocationError} = useUserLocation();
+  const {userLocation, isUserLocationError} = useCurrentLocation();
 
   const handleLogout = () => {
     logoutMutation.mutate(null);
@@ -73,6 +71,9 @@ function MapHomeScreen() {
     });
   };
 
+  const handleMarkerPress = (marker: MarkerType) => {
+    navigation.navigate(mapNavigations.MAP_INFO, {marker});
+  };
   return (
     <>
       <View style={styles.header}>
@@ -87,37 +88,15 @@ function MapHomeScreen() {
         />
         <Text style={styles.h1}>청마루</Text>
       </View>
-      <MapView
+      <GoogleMapView
         ref={mapRef}
-        style={styles.container}
-        provider={PROVIDER_GOOGLE}
-        showsUserLocation
-        followsUserLocation
-        showsMyLocationButton={false}
-        initialRegion={
-          userLocation
-            ? {
-                latitude: userLocation.latitude,
-                longitude: userLocation.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }
-            : undefined
-        }>
-        {coordinates.map((coord, idx) => (
-          <Marker
-            key={idx}
-            coordinate={{
-              latitude: coord.latitude,
-              longitude: coord.longitude,
-            }}
-            image={require('@/assets/icons/map_marker.png')}
-            onPress={() =>
-              navigation.navigate(mapNavigations.MAP_INFO, {marker: coord})
-            }
-          />
-        ))}
-      </MapView>
+        location={{
+          latitude: userLocation.latitude,
+          longitude: userLocation.longitude,
+        }}
+        Markers={Markers}
+        onMarkerPress={handleMarkerPress}
+      />
     </>
   );
 }

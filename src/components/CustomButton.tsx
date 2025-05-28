@@ -4,7 +4,7 @@ import {
   StyleSheet,
   Text,
   PressableProps,
-  Dimensions,onPress={() => navigation.navigate(authNaviagtions.AUTH_LOC)}
+  Dimensions,
   View,
 } from 'react-native';
 
@@ -15,6 +15,7 @@ interface CustomButtonProps extends PressableProps {
   variant?: 'filled' | 'outlined' | 'kakao';
   size?: 'large' | 'medium';
   inValid?: boolean;
+  onPress?: () => void;
 }
 
 const deviceHeight = Dimensions.get('screen').height;

@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {colors} from '@/constants';
+import PostStats from './PostStats';
 
 type Post = {
   id: string | number;
@@ -34,11 +35,12 @@ const PostListItem: React.FC<PostListItemProps> = ({post, onPress}) => (
       <Text style={styles.title}>{post.title}</Text>
     </View>
     <Text style={styles.content}>{post.content}</Text>
-    <View style={styles.statsContainer}>
-      <Text style={styles.stat}>👍 {post.likes}</Text>
-      <Text style={styles.stat}>💬 {post.comments}</Text>
-      <Text style={styles.stat}>👁️ {post.views}</Text>
-    </View>
+    <PostStats
+      likes={post.likes}
+      comments={post.comments}
+      views={post.views}
+      style={{paddingTop: 20}}
+    />
   </TouchableOpacity>
 );
 
