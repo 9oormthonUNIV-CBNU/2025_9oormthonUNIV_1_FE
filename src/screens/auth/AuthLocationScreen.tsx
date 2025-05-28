@@ -1,11 +1,12 @@
-import React, {useState, useRef} from 'react';
+import React, {useRef} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from '@/constants/colors';
-import KakaoMapView from '@/components/KakaoMapView';
 import CustomButton from '@/components/CustomButton';
 import useCurrentLocation from '@/hooks/useCurrentLocation';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import MapView from 'react-native-maps';
+import GoogleMapView from '@/components/GoogleMapView';
+import axios from 'axios';
 
 function AuthLocationScreen() {
   const {userLocation, isUserLocationError} = useCurrentLocation();
@@ -18,23 +19,13 @@ function AuthLocationScreen() {
         <Text>청마루 이용을 위해서는 청주시 위치 인증이 필요해요</Text>
       </View>
       <View style={styles.mapContainer}>
-        <MapView
+        <GoogleMapView
           ref={mapRef}
-          style={styles.container}
-          provider={PROVIDER_GOOGLE}
-          showsUserLocation
-          followsUserLocation
-          showsMyLocationButton={false}
-          initialRegion={
-            userLocation
-              ? {
-                  latitude: userLocation.latitude,
-                  longitude: userLocation.longitude,
-                  latitudeDelta: 0.0922,
-                  longitudeDelta: 0.0421,
-                }
-              : undefined
-          }></MapView>
+          location={{
+            latitude: userLocation.latitude,
+            longitude: userLocation.longitude,
+          }}
+        />
         <View style={styles.locContainer}>
           <Text style={styles.h3}>현재 나의 위치는 </Text>
           <Text style={styles.locText}>“청주시 서원구”</Text>
@@ -44,8 +35,25 @@ function AuthLocationScreen() {
       <View style={styles.buttonContainer}>
         <CustomButton
           label="위치 인증하기"
-          onPress={() => {
-            // Handle location authentication logic here
+          onPress={async () => {
+            console.log('✅ 현재 사용자 위치:', {
+              latitude: userLocation.latitude,
+              longitude: userLocation.longitude,
+            });
+
+            try {
+              const response = await axios.post(
+                'https://your-api.com/api/auth/location',
+                {
+                  latitude: userLocation.latitude,
+                  longitude: userLocation.longitude,
+                },
+              );
+
+              console.log('위치 인증 성공:', response.data);
+            } catch (error) {
+              console.error('위치 인증 실패:', error);
+            }
           }}
         />
       </View>
@@ -74,15 +82,9 @@ const styles = StyleSheet.create({
     color: colors.GRAY_400,
   },
   mapContainer: {
-    flex: 1,
     gap: 10,
     justifyContent: 'center',
-  },
-  map: {
-    width: '100%',
-    height: '80%',
-    backgroundColor: colors.GRAY_200,
-    alignSelf: 'stretch',
+    height: '60%',
   },
   buttonContainer: {
     marginHorizontal: 24,

@@ -7,7 +7,7 @@ import {MarkerType} from '@/constants';
 
 type Props = {
   location: {latitude: number; longitude: number};
-  Markers: MarkerType[];
+  Markers?: MarkerType[];
   onMarkerPress?: (marker: MarkerType) => void;
 };
 
@@ -29,7 +29,7 @@ const GoogleMapView = forwardRef<MapView, Props>(
         followsUserLocation
         showsMyLocationButton={false}
         region={region}>
-        {Markers.map((coord, idx) => (
+        {Markers?.map((coord, idx) => (
           <Marker
             key={idx}
             coordinate={{latitude: coord.latitude, longitude: coord.longitude}}
