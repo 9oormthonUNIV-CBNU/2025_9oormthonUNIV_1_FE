@@ -3,13 +3,88 @@
 import React, {forwardRef} from 'react';
 import {StyleSheet} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker, Region} from 'react-native-maps';
-import {MarkerType} from '@/constants';
+import {MarkerType, colors} from '@/constants';
 
 type Props = {
   location: {latitude: number; longitude: number};
   Markers?: MarkerType[];
   onMarkerPress?: (marker: MarkerType) => void;
 };
+
+const mapStyle = [
+  {
+    elementType: 'geometry',
+    stylers: [{ color: '#e6f2e6' }],
+  },
+  {
+    elementType: 'labels.icon',
+    stylers: [{ visibility: 'off' }],
+  },
+  {
+    elementType: 'labels.text.fill',
+    stylers: [{ color: '#4d774e' }],
+  },
+  {
+    elementType: 'labels.text.stroke',
+    stylers: [{ color: '#f0f9f0' }],
+  },
+  {
+    featureType: 'administrative',
+    elementType: 'geometry',
+    stylers: [{ color: '#a2cfa2' }],
+  },
+  {
+    featureType: 'poi',
+    elementType: 'geometry',
+    stylers: [{ color: '#cdeacc' }],
+  },
+  {
+    featureType: 'poi.park',
+    elementType: 'geometry',
+    stylers: [{ color: '#a8d5a2' }],
+  },
+  {
+    featureType: 'poi.park',
+    elementType: 'labels.text.fill',
+    stylers: [{ color: '#3e6e3e' }],
+  },
+  {
+    featureType: 'road',
+    elementType: 'geometry',
+    stylers: [{ color: '#ffffff' }],
+  },
+  {
+    featureType: 'road.arterial',
+    elementType: 'geometry',
+    stylers: [{ color: '#d7f0d7' }],
+  },
+  {
+    featureType: 'road.highway',
+    elementType: 'geometry',
+    stylers: [{ color: '#b2e0b2' }],
+  },
+  {
+    featureType: 'road.local',
+    elementType: 'geometry',
+    stylers: [{ color: '#eaf7ea' }],
+  },
+  {
+    featureType: 'transit',
+    elementType: 'geometry',
+    stylers: [{ color: '#d5efd5' }],
+  },
+  {
+    featureType: 'water',
+    elementType: 'geometry',
+    stylers: [{ color: '#bde0bd' }],
+  },
+  {
+    featureType: 'water',
+    elementType: 'labels.text.fill',
+    stylers: [{ color: '#3a6b3a' }],
+  },
+];
+
 
 const GoogleMapView = forwardRef<MapView, Props>(
   ({location, Markers, onMarkerPress}, ref) => {
@@ -28,7 +103,8 @@ const GoogleMapView = forwardRef<MapView, Props>(
         showsUserLocation
         followsUserLocation
         showsMyLocationButton={false}
-        region={region}>
+        region={region}
+        customMapStyle={mapStyle}>
         {Markers?.map((coord, idx) => (
           <Marker
             key={idx}

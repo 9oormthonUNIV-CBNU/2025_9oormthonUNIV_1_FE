@@ -1,9 +1,8 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
-import {colors} from '@/constants/colors';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {colors, postNavigations} from '@/constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PostListItem from '@/components/PostListItem';
-import {postNavigations} from '@/constants';
 import {useNavigation} from '@react-navigation/native';
 
 const posts = [
@@ -58,6 +57,14 @@ function FeedHomeScreen() {
           />
         ))}
       </View>
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => navigation.navigate(postNavigations.POST_CREATE)}>
+        <Image
+          source={require('@/assets/icons/plus.png')}
+          style={styles.image}
+        />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -76,6 +83,26 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.BLACK,
     textAlignVertical: 'center',
+  },
+  fab: {
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
+    width: 68,
+    height: 68,
+    borderRadius: 68 / 2,
+    backgroundColor: colors.GREEN,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  image: {
+    width: 24,
+    height: 24,
   },
 });
 
