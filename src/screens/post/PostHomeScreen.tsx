@@ -28,7 +28,7 @@ const posts = [
   },
 ];
 
-function FeedHomeScreen() {
+function PostHomeScreen() {
   const navigation = useNavigation<any>();
   return (
     <SafeAreaView style={styles.container}>
@@ -106,4 +106,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FeedHomeScreen;
+export default PostHomeScreen;
