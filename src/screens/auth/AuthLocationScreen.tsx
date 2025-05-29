@@ -7,9 +7,10 @@ import useCurrentLocation from '@/hooks/useCurrentLocation';
 import MapView from 'react-native-maps';
 import GoogleMapView from '@/components/GoogleMapView';
 import axios from 'axios';
+import useUserLocation from '@/hooks/useUserLocation';
 
 function AuthLocationScreen() {
-  const {userLocation, isUserLocationError} = useCurrentLocation();
+  const {userLocation, isUserLocationError} = useUserLocation();
   const mapRef = useRef<MapView | null>(null);
 
   return (
@@ -18,6 +19,12 @@ function AuthLocationScreen() {
         <Text style={styles.h1}>위치인증하기</Text>
         <Text>청마루 이용을 위해서는 청주시 위치 인증이 필요해요</Text>
       </View>
+      {isUserLocationError && (
+        <Text style={styles.errorText}>
+          ⚠️ 위치 정보를 가져오는 데 실패했습니다. 설정에서 위치 권한을
+          허용했는지 확인해주세요.
+        </Text>
+      )}
       <View style={styles.mapContainer}>
         <GoogleMapView
           ref={mapRef}
@@ -66,7 +73,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginVertical: 40,
     justifyContent: 'center',
-    gap: 60,
+    gap: 80,
   },
   header: {
     gap: 12,
@@ -84,7 +91,7 @@ const styles = StyleSheet.create({
   mapContainer: {
     gap: 10,
     justifyContent: 'center',
-    height: '60%',
+    height: '50%',
   },
   buttonContainer: {
     marginHorizontal: 24,
@@ -103,6 +110,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: colors.BLACK,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 13,
+    fontWeight: '500',
   },
 });
 

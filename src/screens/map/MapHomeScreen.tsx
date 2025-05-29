@@ -7,7 +7,8 @@ import {useNavigation, NavigationProp} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import MapView from 'react-native-maps';
 import useAuth from '@/hooks/queries/useAuth';
-import useCurrentLocation from '@/hooks/useCurrentLocation';
+import useUserLocation from '@/hooks/useUserLocation';
+
 import {colors, mapNavigations, MarkerType} from '@/constants';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
 import GoogleMapView from '@/components/GoogleMapView';
@@ -52,7 +53,7 @@ function MapHomeScreen() {
   const {logoutMutation} = useAuth();
   const navigation = useNavigation<NavigationProp<MapStackParamList>>();
   const mapRef = useRef<MapView | null>(null);
-  const {userLocation, isUserLocationError} = useCurrentLocation();
+  const {userLocation, isUserLocationError} = useUserLocation();
 
   const handleLogout = () => {
     logoutMutation.mutate(null);

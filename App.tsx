@@ -10,11 +10,9 @@ import RootNavigator from '@/navigations/root/RootNavigator';
 
 function App() {
   return (
-    // <Text>asdfadsftest</Text>
-    // <AuthLocationScreen />
     <QueryClientProvider client={queryClient}>
       <NavigationContainer>
-        <RootNavigator />
+        <RootStackNavigator />
       </NavigationContainer>
     </QueryClientProvider>
   );
