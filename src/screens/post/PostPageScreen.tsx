@@ -1,45 +1,18 @@
-import React from 'react';
-import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PostStats from '@/components/PostStats';
 import {colors} from '@/constants';
-
-// Post 타입 정의
-type Post = {
-  id: string | number;
-  title: string;
-  content: string;
-  tags?: string[];
-  imageUrl?: string;
-  likes: number;
-  comments: number;
-  views: number;
-};
-
-// 예시 posts 데이터 (실제 앱에서는 서버에서 받아오거나 context로 관리)
-const posts: Post[] = [
-  {
-    id: 1,
-    tags: ['공부'],
-    title: '충북대생 모여라~',
-    content: '학교 근처에서 스터디 할 인원 구합니다. 최대...',
-    imageUrl: undefined,
-    likes: 10,
-    comments: 10,
-    views: 10,
-  },
-  {
-    id: 2,
-    tags: ['공부'],
-    title: '충북대생 모여라~2',
-    content: '학교 근처에서 스터디 할 인원 구합니다. 최대...',
-    imageUrl: undefined,
-    likes: 10,
-    comments: 10,
-    views: 10,
-  },
-];
+import axiosInstance from '@/api/axiosInstance';
+import {Post} from '@/constants/types';
 
 // 네비게이션 param 타입 정의
 type PostPageScreenRouteProp = RouteProp<
@@ -47,12 +20,51 @@ type PostPageScreenRouteProp = RouteProp<
   'PostPage'
 >;
 
+function mapBackendPostToPost(backendPost: any): Post {
+  return {
+    id: backendPost.id,
+    title: backendPost.title,
+    content: backendPost.content ?? '',
+    tags: backendPost.category ? [backendPost.category] : [],
+    imageUrl: backendPost.imageUrls?.[0] ?? undefined,
+    likes: backendPost.likeCount,
+    comments: backendPost.commentCount ?? 0,
+    views: backendPost.viewCount,
+  };
+}
+
 function PostPageScreen() {
   const route = useRoute<PostPageScreenRouteProp>();
   const {postId} = route.params;
 
-  // postId로 해당 게시글 찾기
-  const post = posts.find(p => p.id === postId);
+  const [post, setPost] = useState<Post | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const res = await axiosInstance.get(`/api/posts/${postId}`);
+        if (res.data.success) {
+          setPost(mapBackendPostToPost(res.data.response));
+        } else {
+          setPost(null);
+        }
+      } catch (e) {
+        setPost(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPost();
+  }, [postId]);
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ActivityIndicator size="large" color={colors.BLUE_400} />
+      </SafeAreaView>
+    );
+  }
 
   if (!post) {
     return (
@@ -66,7 +78,6 @@ function PostPageScreen() {
     <SafeAreaView style={{flex: 1}}>
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>{post.title}</Text>
-
         {post.imageUrl && (
           <Image source={{uri: post.imageUrl}} style={styles.image} />
         )}

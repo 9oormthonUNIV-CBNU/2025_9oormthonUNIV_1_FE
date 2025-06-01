@@ -38,3 +38,12 @@ export type PostListItemProps = {
   post: Post;
   onPress?: () => void;
 };
+
+export type Tag = '공부' | '자유' | '모집' | '정보';
+
+export const tagToCategoryId: Record<Tag, number> = {
+  공부: 1,
+  자유: 2,
+  모집: 3,
+  정보: 4,
+};

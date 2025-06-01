@@ -10,6 +10,8 @@ import {
 
 import {colors} from '@/constants';
 import axiosInstance from '@/api/axiosInstance';
+import {useNavigation} from '@react-navigation/native';
+import {postNavigations} from '@/constants';
 
 type Tag = '공부' | '자유' | '모집' | '정보';
 const tagToCategoryId: Record<Tag, number> = {
@@ -20,6 +22,7 @@ const tagToCategoryId: Record<Tag, number> = {
 };
 
 export default function PostForm() {
+  const navigation = useNavigation();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
@@ -54,6 +57,7 @@ export default function PostForm() {
 
       if (response.data.success) {
         console.log('게시글이 등록되었습니다.');
+        navigation.navigate(postNavigations.POST_HOME as never); // 여기서는 그냥 사용
       } else {
         console.log(
           'response.data.error?.message: ',
