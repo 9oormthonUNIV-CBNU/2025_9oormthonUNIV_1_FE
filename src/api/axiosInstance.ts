@@ -4,7 +4,7 @@ import {getAccessToken} from '@/utils/tokenStorage';
 const instance = axios.create({
   baseURL: 'http://10.0.2.2:8080',
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json; charset=utf-8', //인코딩 해결 안됨
     Accept: '*/*',
   },
 });

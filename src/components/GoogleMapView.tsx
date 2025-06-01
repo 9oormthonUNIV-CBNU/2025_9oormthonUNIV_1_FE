@@ -14,77 +14,76 @@ type Props = {
 const mapStyle = [
   {
     elementType: 'geometry',
-    stylers: [{ color: '#e6f2e6' }],
+    stylers: [{color: '#e6f2e6'}],
   },
   {
     elementType: 'labels.icon',
-    stylers: [{ visibility: 'off' }],
+    stylers: [{visibility: 'off'}],
   },
   {
     elementType: 'labels.text.fill',
-    stylers: [{ color: '#4d774e' }],
+    stylers: [{color: '#4d774e'}],
   },
   {
     elementType: 'labels.text.stroke',
-    stylers: [{ color: '#f0f9f0' }],
+    stylers: [{color: '#f0f9f0'}],
   },
   {
     featureType: 'administrative',
     elementType: 'geometry',
-    stylers: [{ color: '#a2cfa2' }],
+    stylers: [{color: '#a2cfa2'}],
   },
   {
     featureType: 'poi',
     elementType: 'geometry',
-    stylers: [{ color: '#cdeacc' }],
+    stylers: [{color: '#cdeacc'}],
   },
   {
     featureType: 'poi.park',
     elementType: 'geometry',
-    stylers: [{ color: '#a8d5a2' }],
+    stylers: [{color: '#a8d5a2'}],
   },
   {
     featureType: 'poi.park',
     elementType: 'labels.text.fill',
-    stylers: [{ color: '#3e6e3e' }],
+    stylers: [{color: '#3e6e3e'}],
   },
   {
     featureType: 'road',
     elementType: 'geometry',
-    stylers: [{ color: '#ffffff' }],
+    stylers: [{color: '#ffffff'}],
   },
   {
     featureType: 'road.arterial',
     elementType: 'geometry',
-    stylers: [{ color: '#d7f0d7' }],
+    stylers: [{color: '#d7f0d7'}],
   },
   {
     featureType: 'road.highway',
     elementType: 'geometry',
-    stylers: [{ color: '#b2e0b2' }],
+    stylers: [{color: '#b2e0b2'}],
   },
   {
     featureType: 'road.local',
     elementType: 'geometry',
-    stylers: [{ color: '#eaf7ea' }],
+    stylers: [{color: '#eaf7ea'}],
   },
   {
     featureType: 'transit',
     elementType: 'geometry',
-    stylers: [{ color: '#d5efd5' }],
+    stylers: [{color: '#d5efd5'}],
   },
   {
     featureType: 'water',
     elementType: 'geometry',
-    stylers: [{ color: '#bde0bd' }],
+    stylers: [{color: '#bde0bd'}],
   },
   {
     featureType: 'water',
     elementType: 'labels.text.fill',
-    stylers: [{ color: '#3a6b3a' }],
+    stylers: [{color: '#3a6b3a'}],
   },
 ];
-
 
 const GoogleMapView = forwardRef<MapView, Props>(
   ({location, Markers, onMarkerPress}, ref) => {
@@ -110,7 +109,7 @@ const GoogleMapView = forwardRef<MapView, Props>(
             key={idx}
             coordinate={{latitude: coord.latitude, longitude: coord.longitude}}
             image={require('@/assets/icons/map_marker.png')}
-            onPress={() => onMarkerPress?.(coord)}
+            onPress={() => onMarkerPress && onMarkerPress(coord)}
           />
         ))}
       </MapView>

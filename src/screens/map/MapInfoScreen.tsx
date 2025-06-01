@@ -1,6 +1,6 @@
 // screens/MapInfoScreen.tsx
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -9,28 +9,67 @@ import {
   Linking,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import {RouteProp, useRoute} from '@react-navigation/native';
-import type {StackNavigationProp} from '@react-navigation/stack';
-import {colors, mapNavigations, RootStackParamList} from '@/constants';
+import {RootStackParamList} from '@/constants/types'; // types.ts에서 import
+import {colors, mapNavigations} from '@/constants';
+import axiosInstance from '@/api/axiosInstance';
+import {PlaceDetail} from '@/constants/types';
 
-type MapInfoScreenRouteProp = RouteProp<RootStackParamList, 'MapInfo'>;
+type MapInfoScreenRouteProp = RouteProp<
+  RootStackParamList,
+  typeof mapNavigations.MAP_INFO
+>;
 
 const MapInfoScreen: React.FC = () => {
   const route = useRoute<MapInfoScreenRouteProp>();
-  const marker = route.params?.marker;
+  const placeId = route.params?.placeId;
+
+  const [place, setPlace] = useState<PlaceDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  console.log('placeId:', placeId);
+  useEffect(() => {
+    const fetchPlace = async () => {
+      try {
+        const res = await axiosInstance.get(`/api/places/${placeId}`);
+        console.log('res', res);
+        setPlace(res.data);
+      } catch (e) {
+        setPlace(null);
+        console.log('e', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPlace();
+  }, [placeId]);
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color={colors.BLUE_400} />
+      </View>
+    );
+  }
+  console.log('place', place);
+  if (!place) {
+    return (
+      <View style={styles.container}>
+        <Text>장소 정보를 불러올 수 없습니다.</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.name}>{marker?.name || '장소명 미지정'}</Text>
-        <Text style={styles.address}>
-          {marker?.address || '주소 정보 없음'}
-        </Text>
+        <Text style={styles.name}>{place.name || '장소명 미지정'}</Text>
+        <Text style={styles.address}>{place.address || '주소 정보 없음'}</Text>
       </View>
 
       <View style={styles.tagsContainer}>
-        {(marker.tags ?? []).map(tag => (
+        {(place.tags ?? []).map(tag => (
           <Text key={tag} style={styles.tag}>
             {tag}
           </Text>
@@ -42,17 +81,17 @@ const MapInfoScreen: React.FC = () => {
           {
             key: 'time',
             label: '이용시간',
-            value: marker?.hours || '주소 정보 없음',
+            value: place.hours || '정보 없음',
           },
           {
             key: 'capacity',
             label: '수용인원',
-            value: marker?.capacity || '주소 정보 없음',
+            value: place.capacity || '정보 없음',
           },
           {
             key: 'website',
             label: '웹사이트',
-            value: marker?.website || null,
+            value: place.website || null,
           },
         ].map((item, index, arr) => (
           <View
@@ -69,10 +108,10 @@ const MapInfoScreen: React.FC = () => {
               source={require('@/assets/icons/time.png')}
             />
             <Text style={styles.label}>{item.label}</Text>
-
             {item.key === 'website' ? (
               item.value ? (
-                <TouchableOpacity onPress={() => Linking.openURL(item.value)}>
+                <TouchableOpacity
+                  onPress={() => Linking.openURL(String(item.value))}>
                   <Text style={[styles.value, styles.link]}>{item.value}</Text>
                 </TouchableOpacity>
               ) : (
@@ -86,7 +125,9 @@ const MapInfoScreen: React.FC = () => {
       </View>
 
       <View style={styles.desContainer}>
-        <Text style={styles.value}>{marker?.describe || '설명 정보 없음'}</Text>
+        <Text style={styles.value}>
+          {place.description || '설명 정보 없음'}
+        </Text>
       </View>
     </ScrollView>
   );
@@ -94,6 +135,7 @@ const MapInfoScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 28,
     paddingBottom: 60,
     backgroundColor: colors.WHITE,

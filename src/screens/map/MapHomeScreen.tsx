@@ -26,18 +26,21 @@ function MapHomeScreen() {
         if (Array.isArray(res.data)) {
           setMarkers(
             res.data.map((place: any) => ({
+              id: place.id, // 반드시 포함!
               latitude: place.latitude,
               longitude: place.longitude,
               name: place.name,
               address: place.address,
+              tags: place.tags,
+              hours: place.hours,
               capacity: place.capacity,
+              website: place.website,
               describe: place.description,
-              // 필요시 id, website 등 추가
             })),
           );
         }
       } catch (e) {
-        console.error('장소 목록 불러오기 실패:', e);
+        // 에러 처리
       }
     };
     fetchMarkers();
@@ -61,7 +64,7 @@ function MapHomeScreen() {
   };
 
   const handleMarkerPress = (marker: MarkerType) => {
-    navigation.navigate(mapNavigations.MAP_INFO, {marker});
+    navigation.navigate(mapNavigations.MAP_INFO, {placeId: marker.id});
   };
   return (
     <>

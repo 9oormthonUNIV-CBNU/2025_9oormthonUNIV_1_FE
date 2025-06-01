@@ -3,6 +3,7 @@
 import {mapNavigations} from './navigations';
 
 export type MarkerType = {
+  id: number; // 반드시 추가!
   latitude: number;
   longitude: number;
   name?: string;
@@ -16,11 +17,8 @@ export type MarkerType = {
 
 export type RootStackParamList = {
   [mapNavigations.MAP_INFO]: {
-    marker: MarkerType;
+    placeId: number;
   };
-  // 다른 스크린도 여기에 추가할 수 있습니다.
-  // HomeScreen: undefined;
-  // DetailScreen: { id: string };
 };
 
 export type Post = {
@@ -46,4 +44,9 @@ export const tagToCategoryId: Record<Tag, number> = {
   자유: 2,
   모집: 3,
   정보: 4,
+};
+
+export type PlaceDetail = MarkerType & {
+  id: number;
+  description: string;
 };
