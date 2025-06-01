@@ -1,10 +1,10 @@
 import React from 'react';
 import RootStackNavigator from '@/navigations/stack/RootStackNavigator';
 import AuthStackNavigator from '@/navigations/stack/AuthStackNavigator';
-import useAuth from '@/hooks/queries/useAuth';
+import {useAuthContext} from '@/contexts/AuthContext';
 
 function RootNavigator() {
-  const {isLogin = false} = useAuth();
+  const {isLogin} = useAuthContext(true);
   console.log('isLogin:', isLogin);
 
   // if (isLoading) {

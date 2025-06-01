@@ -9,28 +9,23 @@ import {
 } from 'react-native';
 
 import {colors} from '@/constants';
+import axiosInstance from '@/api/axiosInstance';
 
 type Tag = '공부' | '자유' | '모집' | '정보';
+const tagToCategoryId: Record<Tag, number> = {
+  공부: 1,
+  자유: 2,
+  모집: 3,
+  정보: 4,
+};
 
 export default function PostForm() {
-  const [tags, setTags] = useState<Tag[]>([]);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const toggleTag = (tag: Tag) => {
-    if (tags.includes(tag)) {
-      setTags(tags.filter(t => t !== tag));
-    } else {
-      setTags([...tags, tag]);
-    }
-  };
+  const [categoryId, setCategoryId] = useState<number>(); // 카테고리 선택 UI에 맞게 관리
 
   const handleSubmit = async () => {
-    if (!tag) {
-      Alert.alert('알림', '태그를 선택해주세요.');
-      return;
-    }
     if (!title.trim()) {
       Alert.alert('알림', '제목을 입력해주세요.');
       return;
@@ -39,30 +34,35 @@ export default function PostForm() {
       Alert.alert('알림', '본문을 입력해주세요.');
       return;
     }
+    if (!categoryId) {
+      Alert.alert('알림', '카테고리를 선택해주세요.');
+      return;
+    }
 
     setLoading(true);
 
     try {
-      const response = await fetch('https://your-server.com/api/posts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({tag, title, content}),
+      const response = await axiosInstance.post('/api/posts', {
+        categoryId,
+        title,
+        content,
+        imageUrls: [], // 이미지 업로드 기능이 있다면 배열로 전달
       });
 
-      if (!response.ok) {
-        throw new Error('서버 응답 오류');
+      // 응답 결과 콘솔 출력
+      console.log('서버 응답:', response.data);
+
+      if (response.data.success) {
+        console.log('게시글이 등록되었습니다.');
+      } else {
+        console.log(
+          'response.data.error?.message: ',
+          response.data?.error?.message || 'No error message provided',
+        );
       }
-
-      Alert.alert('성공', '서버로 전송 완료!');
-
-      setTag('');
-      setTitle('');
-      setContent('');
     } catch (error) {
+      console.error('게시글 등록 에러:', error);
       Alert.alert('오류', '서버 전송에 실패했습니다.');
-      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -70,6 +70,47 @@ export default function PostForm() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.writeContainer}>
+        <Text style={styles.label}>게시글 카테고리를 선택해주세요.</Text>
+        <View style={styles.tagContainer}>
+          {(['공부', '자유', '모집', '정보'] as Tag[]).map(t => (
+            <TouchableOpacity
+              key={t}
+              style={[
+                styles.tagButton,
+                categoryId === tagToCategoryId[t] && styles.tagButtonSelected,
+              ]}
+              onPress={() => setCategoryId(tagToCategoryId[t])}
+              disabled={loading}>
+              <Text
+                style={[
+                  styles.tagText,
+                  categoryId === tagToCategoryId[t] && styles.tagTextSelected,
+                ]}>
+                {t}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        <TextInput
+          style={(styles.input, styles.titleArea)}
+          placeholder="제목 입력"
+          value={title}
+          onChangeText={setTitle}
+          editable={!loading}
+        />
+
+        <TextInput
+          style={[styles.input, styles.contentArea]}
+          placeholder="본문 입력"
+          value={content}
+          onChangeText={setContent}
+          multiline
+          textAlignVertical="top"
+          editable={!loading}
+        />
+      </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.submitButton, loading && {backgroundColor: '#aaa'}]}
@@ -77,48 +118,10 @@ export default function PostForm() {
           disabled={loading}>
           <Text style={styles.submitButtonText}>
             {loading ? '전송중...' : '완료'}
+            {/* 전송 결과 콘솔 출력 */}
           </Text>
         </TouchableOpacity>
       </View>
-      <Text style={styles.label}>게시글 카테고리를 선택해주세요.</Text>
-      <View style={styles.tagContainer}>
-        {(['공부', '자유', '모집', '정보'] as Tag[]).map(t => (
-          <TouchableOpacity
-            key={t}
-            style={[
-              styles.tagButton,
-              tags.includes(t) && styles.tagButtonSelected,
-            ]}
-            onPress={() => toggleTag(t)}
-            disabled={loading}>
-            <Text
-              style={[
-                styles.tagText,
-                tags.includes(t) && styles.tagTextSelected,
-              ]}>
-              {t}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      <TextInput
-        style={(styles.input, styles.titleArea)}
-        placeholder="제목 입력"
-        value={title}
-        onChangeText={setTitle}
-        editable={!loading}
-      />
-
-      <TextInput
-        style={[styles.input, styles.contentArea]}
-        placeholder="본문 입력"
-        value={content}
-        onChangeText={setContent}
-        multiline
-        textAlignVertical="top"
-        editable={!loading}
-      />
     </View>
   );
 }
@@ -126,16 +129,22 @@ export default function PostForm() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     width: '100%',
     maxWidth: 400,
     alignSelf: 'center',
     backgroundColor: colors.WHITE,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  writeContainer: {
+    padding: 24,
+    marginBottom: 20,
     gap: 8,
   },
   label: {
     fontSize: 16,
     marginBottom: 8,
+    paddingLeft: 4,
   },
   tagContainer: {
     flexDirection: 'row',
@@ -169,24 +178,25 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     padding: 10,
     fontSize: 16,
-    marginBottom: 20,
-    backgroundColor: 'white',
   },
   titleArea: {
     fontSize: 24,
     fontWeight: '700',
     color: colors.BLACK,
+    paddingLeft: 8,
   },
   contentArea: {
-    height: '50%',
+    height: '60%',
   },
   buttonContainer: {
     alignItems: 'flex-end',
-    borderBottomWidth: 1,
-    marginBottom: 20,
+    borderTopWidth: 1,
+    marginBottom: 8,
     borderColor: colors.GRAY_400,
+    width: '100%',
   },
   submitButton: {
+    marginHorizontal: 20,
     paddingVertical: 12,
     width: '20%',
     alignItems: 'flex-end',

@@ -2,22 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {colors} from '@/constants';
 import PostStats from './PostStats';
-
-type Post = {
-  id: string | number;
-  title: string;
-  content: string;
-  tags?: string[];
-  imageUrl?: string;
-  likes: number;
-  comments: number;
-  views: number;
-};
-
-type PostListItemProps = {
-  post: Post;
-  onPress?: () => void;
-};
+import {Post, PostListItemProps} from '@/constants/types';
 
 const PostListItem: React.FC<PostListItemProps> = ({post, onPress}) => (
   <TouchableOpacity

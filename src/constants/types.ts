@@ -22,3 +22,19 @@ export type RootStackParamList = {
   // HomeScreen: undefined;
   // DetailScreen: { id: string };
 };
+
+export type Post = {
+  id: string | number;
+  title: string;
+  content: string;
+  tags?: string[];
+  imageUrl?: string;
+  likes: number;
+  comments: number;
+  views: number;
+};
+
+export type PostListItemProps = {
+  post: Post;
+  onPress?: () => void;
+};

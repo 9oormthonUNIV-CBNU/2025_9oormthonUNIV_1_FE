@@ -1,35 +1,46 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {colors, postNavigations} from '@/constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PostListItem from '@/components/PostListItem';
 import {useNavigation} from '@react-navigation/native';
+import axiosInstance from '@/api/axiosInstance';
+import {Post} from '@/constants/types';
 
-const posts = [
-  {
-    id: 1,
-    tags: ['공부'],
-    title: '충북대생 모여라~',
-    content: '학교 근처에서 스터디 할 인원 구합니다. 최대...',
-    imageUrl: undefined,
-    likes: 10,
-    comments: 10,
-    views: 10,
-  },
-  {
-    id: 2,
-    tags: ['공부'],
-    title: '충북대생 모여라~2',
-    content: '학교 근처에서 스터디 할 인원 구합니다. 최대...',
-    imageUrl: undefined,
-    likes: 10,
-    comments: 10,
-    views: 10,
-  },
-];
+function mapBackendPostToPost(backendPost: any): Post {
+  return {
+    id: backendPost.id,
+    title: backendPost.title,
+    content: '', // 백엔드에 content가 없으므로 빈 문자열
+    tags: [],
+    imageUrl: '', // 필요시 매핑
+    likes: backendPost.likeCount,
+    comments: backendPost.commentCount,
+    views: backendPost.viewCount,
+    // author, category, createdAt 등 필요시 타입/컴포넌트에 추가
+  };
+}
 
 function PostHomeScreen() {
   const navigation = useNavigation<any>();
+  const [posts, setPosts] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const res = await axiosInstance.get('/api/posts');
+        if (res.data.success) {
+          setPosts(res.data.response.map(mapBackendPostToPost));
+        } else {
+          console.log('게시글 불러오기 실패:', res.data.error?.message);
+        }
+      } catch (error) {
+        console.error('게시글 불러오기 에러:', error);
+      }
+    };
+    fetchPosts();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>

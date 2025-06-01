@@ -13,7 +13,8 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme"
-      android:usesCleartextTraffic="true">
+      android:usesCleartextTraffic="true"
+      >
       <meta-data
         android:name="com.google.android.geo.API_KEY"
         android:value="AIzaSyBF7K6pkEuSgWr1bI5-30KzZMxMjpkw-xo"/>
@@ -27,6 +28,7 @@
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
+            <data android:scheme="kakao15b2ee92bbecc02200e822a35cb45f3c" android:host="oauth" />
         </intent-filter>
       </activity>
     </application>

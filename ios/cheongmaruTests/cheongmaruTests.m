@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface MatzipAppTests : XCTestCase
+@interface cheongmaruTests : XCTestCase
 
 @end
 
-@implementation MatzipAppTests
+@implementation cheongmaruTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL (^)(UIView *view))test
 {
