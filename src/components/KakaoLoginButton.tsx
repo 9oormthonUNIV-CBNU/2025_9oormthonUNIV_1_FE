@@ -9,10 +9,11 @@ import {
   Alert,
   TouchableOpacity,
   Text,
+  Image,
 } from 'react-native';
 import {WebView, WebViewNavigation} from 'react-native-webview';
 import {useNavigation, NavigationProp} from '@react-navigation/native';
-import {authNaviagtions} from '@/constants';
+import {authNaviagtions, colors} from '@/constants';
 import {KAKAO_REST_API_KEY, KAKAO_REDIRECT_URI} from '@/config';
 import {saveAccessToken} from '@/utils/tokenStorage';
 
@@ -103,7 +104,12 @@ const KakaoLogin: React.FC<KakaoLoginProps> = ({onPress}) => {
     <View style={styles.container}>
       {/* 기존 Button 대신 TouchableOpacity로 커스텀 버튼 */}
       <TouchableOpacity style={styles.button} onPress={handlePress}>
-        <Text style={styles.buttonText}>카카오 로그인</Text>
+        <Image
+          source={require('@/assets/icons/kakao_icon.png')}
+          style={{width: 24, height: 24, position: 'absolute', left: 20}}
+          resizeMode="contain"
+        />
+        <Text style={styles.buttonText}>카카오톡으로 시작하기</Text>
       </TouchableOpacity>
       <Modal visible={modalVisible} animationType="slide">
         <View style={{flex: 1}}>
@@ -129,19 +135,19 @@ export default KakaoLogin;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
-    padding: 20,
+    width: '100%',
+    zIndex: 1,
   },
   button: {
-    backgroundColor: '#FEE500',
-    padding: 12,
-    borderRadius: 8,
+    backgroundColor: colors.KAKAO_YELLOW,
+    borderRadius: 24,
+    height: 60,
+    justifyContent: 'center',
     alignItems: 'center',
   },
   buttonText: {
-    color: '#3C1E1E',
+    color: colors.BLACK,
     fontWeight: 'bold',
-    fontSize: 16,
   },
 });

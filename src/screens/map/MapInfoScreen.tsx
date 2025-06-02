@@ -16,6 +16,7 @@ import {RootStackParamList} from '@/constants/types'; // types.ts에서 import
 import {colors, mapNavigations} from '@/constants';
 import axiosInstance from '@/api/axiosInstance';
 import {PlaceDetail} from '@/constants/types';
+import {tagIdsToNames} from '@/utils/tagMap';
 
 type MapInfoScreenRouteProp = RouteProp<
   RootStackParamList,
@@ -60,19 +61,47 @@ const MapInfoScreen: React.FC = () => {
     );
   }
 
+  // 이미지 매핑 객체 선언
+  const images: {[key: string]: any} = {
+    'place1.png': require('@/assets/place1.png'),
+    'place2.png': require('@/assets/place2.png'),
+    'place3.png': require('@/assets/place3.png'),
+  };
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollContent}>
       <View style={styles.header}>
         <Text style={styles.name}>{place.name || '장소명 미지정'}</Text>
         <Text style={styles.address}>{place.address || '주소 정보 없음'}</Text>
       </View>
+      <View style={{height: 200}}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {['place1.png', 'place2.png', 'place3.png'].map((img, idx) => (
+            <Image
+              key={img}
+              source={images[img]}
+              style={{
+                width: 300,
+                height: 200,
+                borderRadius: 12,
+                marginRight: 16,
+              }}
+              resizeMode="cover"
+            />
+          ))}
+        </ScrollView>
+      </View>
 
       <View style={styles.tagsContainer}>
-        {(place.tags ?? []).map(tag => (
-          <Text key={tag} style={styles.tag}>
-            {tag}
-          </Text>
-        ))}
+        {place.tagIds && place.tagIds.length > 0 ? (
+          tagIdsToNames(place.tagIds).map(tag => (
+            <Text key={tag} style={styles.tag}>
+              {tag}
+            </Text>
+          ))
+        ) : (
+          <Text style={styles.tag}>없음</Text>
+        )}
       </View>
 
       <View style={styles.infoWrapper}>
@@ -80,17 +109,17 @@ const MapInfoScreen: React.FC = () => {
           {
             key: 'time',
             label: '이용시간',
-            value: place.hours || '정보 없음',
+            value: place.hours || '09:00 - 18:00', //임시
           },
           {
             key: 'capacity',
             label: '수용인원',
-            value: place.capacity || '정보 없음',
+            value: place.capacity || '10명', //임시
           },
           {
             key: 'website',
             label: '웹사이트',
-            value: place.website || null,
+            value: place.link || null,
           },
         ].map((item, index, arr) => (
           <View
@@ -135,13 +164,17 @@ const MapInfoScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 28,
-    paddingBottom: 60,
     backgroundColor: colors.WHITE,
-    gap: 50,
+  },
+  scrollContent: {
+    padding: 20,
+    paddingTop: 20,
+    paddingBottom: 200,
+    gap: 30,
+    backgroundColor: colors.WHITE,
   },
   header: {
-    gap: 10,
+    gap: 4,
   },
   name: {
     fontSize: 24,
@@ -187,12 +220,12 @@ const styles = StyleSheet.create({
   },
 
   label: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '700',
     color: colors.BLACK,
   },
   value: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '400',
     color: colors.BLACK,
   },

@@ -1,9 +1,17 @@
 import React from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
-import {Dimensions, SafeAreaView, StyleSheet, View, Text} from 'react-native';
+import {
+  Dimensions,
+  SafeAreaView,
+  StyleSheet,
+  Image,
+  Text,
+  View,
+} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 import {AuthStackParamList} from '@/navigations/stack/AuthStackNavigator';
-import {authNaviagtions} from '@/constants';
+import {authNaviagtions, colors} from '@/constants';
 import KakaoLoginButton from '@/components/KakaoLoginButton';
 
 type AuthHomeScreenProps = StackScreenProps<
@@ -13,24 +21,28 @@ type AuthHomeScreenProps = StackScreenProps<
 
 function AuthHomeScreen({navigation}: AuthHomeScreenProps) {
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Text style={styles.appName}>청마루</Text>
+    <LinearGradient
+      colors={['#E2F994', '#C4F044', '#9DE806']}
+      start={{x: 0, y: 0}}
+      end={{x: 1, y: 1}}
+      style={styles.container}>
+      <Image
+        source={require('@/assets/icons/app_icon_800.png')}
+        style={{width: 180, height: 70}}
+        resizeMode="contain"
+      />
+      <Text style={styles.appName}>청마루</Text>
+      <Text style={styles.subtitle}>청마루에 오신 것을 환영합니다.</Text>
+      <View style={styles.buttonContainer}>
+        <KakaoLoginButton />
       </View>
-      <KakaoLoginButton />
-    </SafeAreaView>
+    </LinearGradient>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    marginHorizontal: 30,
-    marginVertical: 30,
-  },
-  imageContainer: {
-    flex: 1.5,
-    width: Dimensions.get('screen').width / 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -39,11 +51,35 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   appName: {
+    fontFamily: 'SOYO MAPLE BOLD',
     color: '#222222',
-    fontSize: 38,
+    fontSize: 32,
     fontWeight: '700',
     textAlign: 'center',
-    marginVertical: 20,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  subtitle: {
+    fontFamily: 'SOYO MAPLE',
+    color: '#222222',
+    fontSize: 15,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginBottom: 120,
+  },
+  buttonContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: colors.WHITE,
+    width: '100%',
+    height: '20%',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+
+    paddingHorizontal: 20,
+    paddingVertical: 28,
   },
 });
 

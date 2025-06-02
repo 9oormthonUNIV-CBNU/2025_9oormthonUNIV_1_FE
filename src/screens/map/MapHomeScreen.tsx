@@ -12,6 +12,8 @@ import GoogleMapView from '@/components/GoogleMapView';
 import axiosInstance from '@/api/axiosInstance';
 import {ScrollView, TouchableOpacity} from 'react-native';
 import CustomHeader from '@/components/CustomHeader';
+import iconApp from '@/assets/icons/app_icon_200.png';
+import {tagIdsToNames} from '@/utils/tagMap';
 
 function MapHomeScreen() {
   const {logoutMutation} = useAuth();
@@ -20,7 +22,7 @@ function MapHomeScreen() {
   const {userLocation, isUserLocationError} = useUserLocation();
 
   const [markers, setMarkers] = useState<MarkerType[]>([]);
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   // 모든 태그 추출 (중복 제거)
   const allTags = useMemo(() => {
@@ -30,9 +32,9 @@ function MapHomeScreen() {
 
   // 필터링된 마커
   const filteredMarkers = useMemo(() => {
-    if (!selectedTag) return markers;
-    return markers.filter(m => m.tags?.includes(selectedTag));
-  }, [markers, selectedTag]);
+    if (selectedTags.length === 0) return markers;
+    return markers.filter(m => m.tags?.some(tag => selectedTags.includes(tag)));
+  }, [markers, selectedTags]);
 
   useEffect(() => {
     const fetchMarkers = async () => {
@@ -47,7 +49,7 @@ function MapHomeScreen() {
               longitude: place.longitude,
               name: place.name,
               address: place.address,
-              tags: place.tags,
+              tags: tagIdsToNames(place.tagIds),
               hours: place.hours,
               capacity: place.capacity,
               website: place.website,
@@ -62,29 +64,12 @@ function MapHomeScreen() {
     fetchMarkers();
   }, []);
 
-  const handleLogout = () => {
-    logoutMutation.mutate(null);
-  };
-
-  const handlePressUserLocation = () => {
-    if (isUserLocationError || !userLocation) {
-      // 에러메세지를 표시하기
-      return;
-    }
-    mapRef.current?.animateToRegion({
-      latitude: userLocation.latitude,
-      longitude: userLocation.longitude,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
-    });
-  };
-
   const handleMarkerPress = (marker: MarkerType) => {
     navigation.navigate(mapNavigations.MAP_INFO, {placeId: marker.id});
   };
   return (
     <View style={{flex: 1}}>
-      <CustomHeader text="지도" />
+      <CustomHeader text="청마루" iconSource={iconApp} />
       <GoogleMapView
         ref={mapRef}
         location={{
@@ -93,27 +78,51 @@ function MapHomeScreen() {
         }}
         Markers={filteredMarkers}
         onMarkerPress={handleMarkerPress}
-        style={{flex: 1}}
       />
       {/* 태그 필터 버튼 하단에 추가 */}
       <View style={styles.filterContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {/* 전체 선택: 모두 해제 */}
           <TouchableOpacity
-            style={[styles.filterBtn, !selectedTag && styles.filterBtnSelected]}
-            onPress={() => setSelectedTag(null)}>
-            <Text style={styles.filterText}>전체</Text>
-          </TouchableOpacity>
-          {allTags.map(tag => (
-            <TouchableOpacity
-              key={tag}
+            style={[
+              styles.filterBtn,
+              selectedTags.length === 0 && styles.filterBtnSelected,
+            ]}
+            onPress={() => setSelectedTags([])}>
+            <Text
               style={[
-                styles.filterBtn,
-                selectedTag === tag && styles.filterBtnSelected,
-              ]}
-              onPress={() => setSelectedTag(tag)}>
-              <Text style={styles.filterText}>{tag}</Text>
-            </TouchableOpacity>
-          ))}
+                styles.filterText,
+                selectedTags.length === 0 && styles.filterTextSelected,
+              ]}>
+              #전체
+            </Text>
+          </TouchableOpacity>
+          {allTags.map(tag => {
+            const isSelected = selectedTags.includes(tag);
+            return (
+              <TouchableOpacity
+                key={tag}
+                style={[
+                  styles.filterBtn,
+                  isSelected && styles.filterBtnSelected,
+                ]}
+                onPress={() => {
+                  if (isSelected) {
+                    setSelectedTags(selectedTags.filter(t => t !== tag));
+                  } else {
+                    setSelectedTags([...selectedTags, tag]);
+                  }
+                }}>
+                <Text
+                  style={[
+                    styles.filterText,
+                    isSelected && styles.filterTextSelected,
+                  ]}>
+                  #{tag}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
         </ScrollView>
       </View>
     </View>
@@ -138,27 +147,28 @@ const styles = StyleSheet.create({
   },
   filterContainer: {
     position: 'absolute',
-    bottom: 24,
-    left: 0,
-    right: 0,
-    paddingHorizontal: 16,
+    bottom: 160,
+    left: 16,
     paddingVertical: 12,
     flexDirection: 'row',
     alignItems: 'center',
   },
   filterBtn: {
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    borderRadius: 16,
-    backgroundColor: '#e0e0e0',
-    marginRight: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 8,
+    backgroundColor: colors.GRAY_200,
+    marginHorizontal: 8,
   },
   filterBtnSelected: {
     backgroundColor: colors.BLUE_400,
   },
   filterText: {
-    color: colors.BLACK,
+    color: colors.GRAY_800,
     fontWeight: 'bold',
+  },
+  filterTextSelected: {
+    color: colors.WHITE,
   },
 });
 

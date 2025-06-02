@@ -12,7 +12,7 @@ import {colors} from '@/constants';
 
 interface CustomButtonProps extends PressableProps {
   label: string;
-  variant?: 'filled' | 'outlined' | 'kakao';
+  variant?: 'filled' | 'outlined';
   size?: 'large' | 'medium';
   inValid?: boolean;
   onPress?: () => void;
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     flexDirection: 'row',
     justifyContent: 'center',
+
   },
   inValid: {
     opacity: 0.5,
@@ -59,9 +60,7 @@ const styles = StyleSheet.create({
     borderColor: colors.GREEN,
     borderWidth: 1,
   },
-  kakao: {
-    backgroundColor: colors.KAKAO_YELLOW,
-  },
+
   filledPressed: {
     backgroundColor: colors.BLACK,
   },
@@ -70,9 +69,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     opacity: 0.5,
   },
-  kakaoPressed: {
-    backgroundColor: colors.GRAY_200,
-  },
+
   large: {
     width: '100%',
     paddingVertical: deviceHeight > 700 ? 20 : 18,

@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   },
   writeContainer: {
     padding: 24,
-    marginBottom: 20,
+    marginBottom: -28,
     gap: 8,
   },
   label: {
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: colors.GRAY_800,
+    borderColor: colors.GRAY_400,
     marginRight: 10,
     marginBottom: 10,
   },
@@ -190,12 +190,12 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
   },
   contentArea: {
-    height: '60%',
+    height: '50%',
   },
   buttonContainer: {
     alignItems: 'flex-end',
     borderTopWidth: 1,
-    marginBottom: 8,
+    marginBottom: 350,
     borderColor: colors.GRAY_400,
     width: '100%',
   },

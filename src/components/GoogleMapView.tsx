@@ -4,6 +4,7 @@ import React, {forwardRef} from 'react';
 import {StyleSheet, ViewStyle} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker, Region} from 'react-native-maps';
 import {MarkerType, colors} from '@/constants';
+let markerImage = require('@/assets/icons/marker_shareoffice_v2.png');
 
 type Props = {
   location: {latitude: number; longitude: number};
@@ -15,7 +16,7 @@ type Props = {
 const mapStyle = [
   {
     elementType: 'geometry',
-    stylers: [{color: '#e6f2e6'}],
+    stylers: [{color: '#e3f2d3'}], // 전체 바탕: 밝은 연두
   },
   {
     elementType: 'labels.icon',
@@ -23,66 +24,81 @@ const mapStyle = [
   },
   {
     elementType: 'labels.text.fill',
-    stylers: [{color: '#4d774e'}],
+    stylers: [{color: '#3e703b'}], // 텍스트: 진한 녹색
   },
   {
     elementType: 'labels.text.stroke',
-    stylers: [{color: '#f0f9f0'}],
+    stylers: [{color: '#ffffff'}], // 텍스트 테두리: 흰색
   },
   {
     featureType: 'administrative',
     elementType: 'geometry',
-    stylers: [{color: '#a2cfa2'}],
+    stylers: [{color: '#cce8b5'}], // 구역 경계: 연녹색
   },
   {
     featureType: 'poi',
     elementType: 'geometry',
-    stylers: [{color: '#cdeacc'}],
+    stylers: [{color: '#d9f0c2'}], // 주요 지점 배경: 연한 초록
   },
   {
     featureType: 'poi.park',
     elementType: 'geometry',
-    stylers: [{color: '#a8d5a2'}],
+    stylers: [{color: '#c2e6b4'}], // 공원: 밝은 연두
   },
   {
     featureType: 'poi.park',
     elementType: 'labels.text.fill',
-    stylers: [{color: '#3e6e3e'}],
+    stylers: [{color: '#4b7d35'}],
   },
   {
     featureType: 'road',
     elementType: 'geometry',
-    stylers: [{color: '#ffffff'}],
+    stylers: [{color: '#ffffff'}], // 도로 바탕: 흰색
   },
   {
     featureType: 'road.arterial',
     elementType: 'geometry',
-    stylers: [{color: '#d7f0d7'}],
+    stylers: [{color: '#e4f4d5'}], // 주요 도로: 아주 연한 연두
   },
   {
     featureType: 'road.highway',
     elementType: 'geometry',
-    stylers: [{color: '#b2e0b2'}],
+    stylers: [{color: '#cbe6a8'}],
   },
   {
     featureType: 'road.local',
     elementType: 'geometry',
-    stylers: [{color: '#eaf7ea'}],
+    stylers: [{color: '#f6fbef'}], // 거의 흰 연두
+  },
+  {
+    featureType: 'road.highway',
+    elementType: 'geometry.stroke',
+    stylers: [{color: '#bddf9f'}],
+  },
+  {
+    featureType: 'road.arterial',
+    elementType: 'geometry.stroke',
+    stylers: [{color: '#d0efbc'}],
   },
   {
     featureType: 'transit',
     elementType: 'geometry',
-    stylers: [{color: '#d5efd5'}],
+    stylers: [{color: '#e6f6cd'}], // 교통: 흐린 연두
   },
   {
     featureType: 'water',
     elementType: 'geometry',
-    stylers: [{color: '#bde0bd'}],
+    stylers: [{color: '#d4f1e2'}], // 물: 연한 민트 계열
   },
   {
     featureType: 'water',
     elementType: 'labels.text.fill',
-    stylers: [{color: '#3a6b3a'}],
+    stylers: [{color: '#4e8c2b'}],
+  },
+  {
+    featureType: 'administrative',
+    elementType: 'labels.text.fill',
+    stylers: [{color: '#5a5a5a'}],
   },
 ];
 
@@ -98,21 +114,50 @@ const GoogleMapView = forwardRef<MapView, Props>(
     return (
       <MapView
         ref={ref}
-        style={[styles.container, style]}
         provider={PROVIDER_GOOGLE}
         showsUserLocation
         followsUserLocation
         showsMyLocationButton={false}
         region={region}
-        customMapStyle={mapStyle}>
-        {Markers?.map((coord, idx) => (
-          <Marker
-            key={idx}
-            coordinate={{latitude: coord.latitude, longitude: coord.longitude}}
-            image={require('@/assets/icons/map_marker.png')}
-            onPress={() => onMarkerPress?.(coord)}
-          />
-        ))}
+        customMapStyle={mapStyle}
+        style={[style, styles.container]}>
+        {Markers?.map((coord, idx) => {
+          console.log('coord:', coord);
+          let markerImg = markerImage;
+          const tagImageMap: {[key: string]: any} = {
+            공유오피스: require('@/assets/marker_imgs/공유오피스.png'),
+            도서관: require('@/assets/marker_imgs/도서관.png'),
+            스터디카페: require('@/assets/marker_imgs/스터디카페.png'),
+            청년지원기관: require('@/assets/marker_imgs/청년지원기관.png'),
+            창업지원: require('@/assets/marker_imgs/창업지원.png'),
+            취업지원: require('@/assets/marker_imgs/취업지원.png'),
+            문화공간: require('@/assets/marker_imgs/문화공간.png'),
+          };
+
+          if (coord.tags) {
+            for (const tag of coord.tags) {
+              const found = Object.keys(tagImageMap).find(key =>
+                tag.includes(key),
+              );
+              if (found) {
+                markerImg = tagImageMap[found];
+                break;
+              }
+            }
+          }
+
+          return (
+            <Marker
+              key={idx}
+              coordinate={{
+                latitude: coord.latitude,
+                longitude: coord.longitude,
+              }}
+              image={markerImg}
+              onPress={() => onMarkerPress?.(coord)}
+            />
+          );
+        })}
       </MapView>
     );
   },
@@ -120,11 +165,7 @@ const GoogleMapView = forwardRef<MapView, Props>(
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
+    flex: 1,
   },
 });
 

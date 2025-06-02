@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image} from 'react-native';
+import {Image, View, Platform} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MapHomeScreen from '@/screens/map/MapHomeScreen';
 import PostHomeScreen from '@/screens/post/PostHomeScreen';
@@ -9,14 +9,29 @@ import MapStackNavigator from '../stack/MapStackNavigator';
 import PostStackNavigator from '../stack/PostStackNavigator';
 
 const Tab = createBottomTabNavigator();
-const TAB_ICON_SIZE = 32; // 아이콘 크기 설정
+const TAB_ICON_SIZE = 32;
+
+import {Dimensions} from 'react-native';
+
+const TAB_BAR_HEIGHT = Dimensions.get('window').height * 0.16;
+
 const screenOptions = {
   headerShown: false,
   tabBarStyle: {
-    paddingVertical: 16,
-    height: `12%`,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    width: '100%',
+    height: TAB_BAR_HEIGHT,
     backgroundColor: colors.WHITE,
-    elevation: 0,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    // backgroundColor: colors.WHITE,
+    // borderTopWidth: 4,
+    // borderLeftWidth: 4,
+    // borderRightWidth: 4,
+    // borderColor: colors.GREEN,
+    overflow: 'visible' as 'visible',
+    position: 'absolute' as 'absolute',
   },
   tabBarIconStyle: {
     flex: 1,
@@ -27,11 +42,12 @@ const screenOptions = {
     color: colors.BLACK,
   },
 };
+
 function MainTabNavigator() {
   return (
     <Tab.Navigator screenOptions={screenOptions}>
       <Tab.Screen
-        name="Map"
+        name="홈"
         component={MapStackNavigator}
         options={{
           tabBarIcon: ({focused}) => (
@@ -41,14 +57,18 @@ function MainTabNavigator() {
                   ? require('@/assets/icons/map_active.png')
                   : require('@/assets/icons/map.png')
               }
-              style={{width: TAB_ICON_SIZE, height: TAB_ICON_SIZE}}
+              style={{
+                width: TAB_ICON_SIZE,
+                height: TAB_ICON_SIZE,
+                ...(focused && {tintColor: colors.BLACK}), // focused일 때만 tintColor 적용
+              }}
               resizeMode="contain"
             />
           ),
         }}
       />
       <Tab.Screen
-        name="post"
+        name="게시판"
         component={PostStackNavigator}
         options={{
           tabBarIcon: ({focused}) => (
@@ -58,14 +78,18 @@ function MainTabNavigator() {
                   ? require('@/assets/icons/post_active.png')
                   : require('@/assets/icons/post.png')
               }
-              style={{width: TAB_ICON_SIZE, height: TAB_ICON_SIZE}}
+              style={{
+                width: TAB_ICON_SIZE,
+                height: TAB_ICON_SIZE,
+                ...(focused && {tintColor: colors.BLACK}), // focused일 때만 tintColor 적용
+              }}
               resizeMode="contain"
             />
           ),
         }}
       />
       <Tab.Screen
-        name="mypage"
+        name="MY"
         component={MyPageScreen}
         options={{
           tabBarIcon: ({focused}) => (
@@ -75,7 +99,11 @@ function MainTabNavigator() {
                   ? require('@/assets/icons/mypage_active.png')
                   : require('@/assets/icons/mypage.png')
               }
-              style={{width: TAB_ICON_SIZE, height: TAB_ICON_SIZE}}
+              style={{
+                width: TAB_ICON_SIZE,
+                height: TAB_ICON_SIZE,
+                ...(focused && {tintColor: colors.BLACK}), // focused일 때만 tintColor 적용
+              }}
               resizeMode="contain"
             />
           ),

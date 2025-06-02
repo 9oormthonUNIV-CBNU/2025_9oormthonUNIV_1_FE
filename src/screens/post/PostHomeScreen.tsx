@@ -7,6 +7,8 @@ import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import axiosInstance from '@/api/axiosInstance';
 import {Post} from '@/constants/types';
 import {ScrollView} from 'react-native-gesture-handler';
+import CustomHeader from '@/components/CustomHeader';
+import iconApp from '@/assets/icons/post_active.png';
 
 function mapBackendPostToPost(backendPost: any): Post {
   return {
@@ -47,21 +49,19 @@ function PostHomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Image
-          source={require('@/assets/icons/post_active.png')}
-          style={{
-            width: 32,
-            height: 32,
-            marginRight: 16,
-            marginBottom: -6,
-            resizeMode: 'contain',
-            alignItems: 'center',
-          }}
-        />
-        <Text style={styles.h1}>게시글</Text>
-      </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <CustomHeader
+        text="게시판"
+        iconSource={iconApp}
+        iconSize={{width: 24, height: 24}}
+      />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{
+          marginTop: 150,
+          paddingHorizontal: 8,
+          // borderTopWidth: 2,
+          // borderTopColor: colors.GRAY_400,
+        }}>
         {posts.map(post => (
           <PostListItem
             key={post.id}
@@ -85,23 +85,10 @@ function PostHomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1, gap: 40, backgroundColor: colors.GRAY_200},
-  header: {
-    height: '12%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.WHITE,
-    paddingHorizontal: 24,
-  },
-  h1: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: colors.BLACK,
-    textAlignVertical: 'center',
-  },
+  container: {flex: 1, backgroundColor: colors.GRAY_200},
   fab: {
     position: 'absolute',
-    bottom: 30,
+    bottom: 150,
     right: 30,
     width: 68,
     height: 68,
@@ -109,11 +96,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.GREEN,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 5,
+    elevation: 12,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
   },
   image: {
     width: 24,
