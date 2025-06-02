@@ -24,7 +24,10 @@ function MainStackNavigator() {
       <Stack.Screen
         name={postNavigations.POST_PAGE}
         component={PostPageScreen}
-        options={{headerShown: true, title: ' '}}
+        options={{
+          headerShown: true,
+          title: ' ',
+        }}
       />
       <Stack.Screen
         name={postNavigations.POST_CREATE}

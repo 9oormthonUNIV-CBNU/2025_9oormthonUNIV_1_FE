@@ -32,7 +32,7 @@ function CalendarHomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 0.9,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',

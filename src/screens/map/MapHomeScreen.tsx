@@ -1,22 +1,26 @@
 // MapHomeScreen.tsx
 
 import React, {useRef, useEffect, useState, useMemo} from 'react';
-import {StyleSheet, View, Image, Text} from 'react-native';
-import {useNavigation, NavigationProp} from '@react-navigation/native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import MapView from 'react-native-maps';
-import useAuth from '@/hooks/queries/useAuth';
+
+import {useNavigation, NavigationProp} from '@react-navigation/native';
 import useUserLocation from '@/hooks/useUserLocation';
 import {colors, mapNavigations, MarkerType} from '@/constants';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
 import GoogleMapView from '@/components/GoogleMapView';
 import axiosInstance from '@/api/axiosInstance';
-import {ScrollView, TouchableOpacity} from 'react-native';
 import CustomHeader from '@/components/CustomHeader';
 import iconApp from '@/assets/icons/app_icon_200.png';
 import {tagIdsToNames} from '@/utils/tagMap';
 
 function MapHomeScreen() {
-  const {logoutMutation} = useAuth();
   const navigation = useNavigation<NavigationProp<MapStackParamList>>();
   const mapRef = useRef<MapView | null>(null);
   const {userLocation, isUserLocationError} = useUserLocation();

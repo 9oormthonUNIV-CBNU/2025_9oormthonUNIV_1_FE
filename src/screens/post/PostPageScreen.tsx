@@ -10,9 +10,10 @@ import {
 import {RouteProp, useRoute} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PostStats from '@/components/PostStats';
-import {colors} from '@/constants';
+import {colors, Post} from '@/constants';
 import axiosInstance from '@/api/axiosInstance';
-import {Post} from '@/constants/types';
+import {useHideTabBarOnFocus} from '@/utils/roadBottomNavigationBar';
+import LikeAndComment from '@/components/LikeAndComment';
 
 // 네비게이션 param 타입 정의
 type PostPageScreenRouteProp = RouteProp<
@@ -40,11 +41,14 @@ function PostPageScreen() {
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
 
+  useHideTabBarOnFocus();
+
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const res = await axiosInstance.get(`/api/posts/${postId}`);
         if (res.data.success) {
+          console.log('res.data', res.data);
           setPost(mapBackendPostToPost(res.data.response));
         } else {
           setPost(null);
@@ -95,6 +99,7 @@ function PostPageScreen() {
           views={post.views}
         />
       </ScrollView>
+      <LikeAndComment />
     </SafeAreaView>
   );
 }

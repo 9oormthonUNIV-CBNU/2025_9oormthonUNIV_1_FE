@@ -14,7 +14,7 @@ function mapBackendPostToPost(backendPost: any): Post {
   return {
     id: backendPost.id,
     title: backendPost.title,
-    content: '...자세히보기', // 백엔드에 content가 없으므로 빈 문자열
+    content: backendPost.content,
     tags: backendPost.category ? [backendPost.category] : [],
     imageUrl: '', // 필요시 매핑
     likes: backendPost.likeCount,
@@ -34,7 +34,7 @@ function PostHomeScreen() {
         try {
           const res = await axiosInstance.get('/api/posts');
           if (res.data.success) {
-            console.log('게시글 불러오기 성공:', res.data.response);
+            console.log('게시글 전체 조회 성공:', res.data.response);
             setPosts(res.data.response.map(mapBackendPostToPost));
           } else {
             console.log('게시글 불러오기 실패:', res.data.error?.message);

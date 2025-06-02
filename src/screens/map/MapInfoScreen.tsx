@@ -1,6 +1,6 @@
 // screens/MapInfoScreen.tsx
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useLayoutEffect} from 'react';
 import {
   View,
   Text,
@@ -17,6 +17,8 @@ import {colors, mapNavigations} from '@/constants';
 import axiosInstance from '@/api/axiosInstance';
 import {PlaceDetail} from '@/constants/types';
 import {tagIdsToNames} from '@/utils/tagMap';
+import {useNavigation, useIsFocused} from '@react-navigation/native';
+import {useHideTabBarOnFocus} from '@/utils/roadBottomNavigationBar';
 
 type MapInfoScreenRouteProp = RouteProp<
   RootStackParamList,
@@ -29,6 +31,9 @@ const MapInfoScreen: React.FC = () => {
 
   const [place, setPlace] = useState<PlaceDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
+  const isFocused = useIsFocused();
+
   console.log('placeId:', placeId);
   useEffect(() => {
     const fetchPlace = async () => {
@@ -44,6 +49,8 @@ const MapInfoScreen: React.FC = () => {
     };
     fetchPlace();
   }, [placeId]);
+
+  useHideTabBarOnFocus();
 
   if (loading) {
     return (

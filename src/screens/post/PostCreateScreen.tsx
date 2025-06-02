@@ -12,6 +12,7 @@ import {colors} from '@/constants';
 import axiosInstance from '@/api/axiosInstance';
 import {useNavigation} from '@react-navigation/native';
 import {postNavigations} from '@/constants';
+import {useHideTabBarOnFocus} from '@/utils/roadBottomNavigationBar';
 
 type Tag = '공부' | '자유' | '모집' | '정보';
 const tagToCategoryId: Record<Tag, number> = {
@@ -27,6 +28,8 @@ export default function PostForm() {
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
   const [categoryId, setCategoryId] = useState<number>(); // 카테고리 선택 UI에 맞게 관리
+
+  useHideTabBarOnFocus();
 
   const handleSubmit = async () => {
     if (!title.trim()) {
@@ -190,12 +193,12 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
   },
   contentArea: {
-    height: '50%',
+    height: '60%',
   },
   buttonContainer: {
     alignItems: 'flex-end',
     borderTopWidth: 1,
-    marginBottom: 350,
+    marginBottom: 60,
     borderColor: colors.GRAY_400,
     width: '100%',
   },

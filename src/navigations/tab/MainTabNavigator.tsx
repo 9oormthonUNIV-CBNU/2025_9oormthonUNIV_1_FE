@@ -15,24 +15,21 @@ import {Dimensions} from 'react-native';
 
 const TAB_BAR_HEIGHT = Dimensions.get('window').height * 0.16;
 
-const screenOptions = {
+export const TAB_BAR_STYLE = {
+  paddingHorizontal: 20,
+  paddingVertical: 20,
+  width: Dimensions.get('window').width,
+  height: TAB_BAR_HEIGHT,
+  backgroundColor: colors.WHITE,
+  borderTopLeftRadius: 20,
+  borderTopRightRadius: 20,
+  overflow: 'visible' as 'visible',
+  position: 'absolute' as 'absolute',
+};
+
+export const MAIN_TAB_SCREEN_OPTIONS = {
   headerShown: false,
-  tabBarStyle: {
-    paddingHorizontal: 20,
-    paddingVertical: 20,
-    width: '100%',
-    height: TAB_BAR_HEIGHT,
-    backgroundColor: colors.WHITE,
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-    // backgroundColor: colors.WHITE,
-    // borderTopWidth: 4,
-    // borderLeftWidth: 4,
-    // borderRightWidth: 4,
-    // borderColor: colors.GREEN,
-    overflow: 'visible' as 'visible',
-    position: 'absolute' as 'absolute',
-  },
+  tabBarStyle: TAB_BAR_STYLE,
   tabBarIconStyle: {
     flex: 1,
   },
@@ -45,7 +42,7 @@ const screenOptions = {
 
 function MainTabNavigator() {
   return (
-    <Tab.Navigator screenOptions={screenOptions}>
+    <Tab.Navigator screenOptions={MAIN_TAB_SCREEN_OPTIONS}>
       <Tab.Screen
         name="홈"
         component={MapStackNavigator}
