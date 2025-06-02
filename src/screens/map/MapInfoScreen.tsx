@@ -33,7 +33,6 @@ const MapInfoScreen: React.FC = () => {
     const fetchPlace = async () => {
       try {
         const res = await axiosInstance.get(`/api/places/${placeId}`);
-        console.log('res', res);
         setPlace(res.data);
       } catch (e) {
         setPlace(null);

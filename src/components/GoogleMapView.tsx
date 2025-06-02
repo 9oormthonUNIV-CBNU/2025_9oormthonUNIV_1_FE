@@ -1,7 +1,7 @@
 // GoogleMapView.tsx
 
 import React, {forwardRef} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, ViewStyle} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker, Region} from 'react-native-maps';
 import {MarkerType, colors} from '@/constants';
 
@@ -9,6 +9,7 @@ type Props = {
   location: {latitude: number; longitude: number};
   Markers?: MarkerType[];
   onMarkerPress?: (marker: MarkerType) => void;
+  style?: ViewStyle;
 };
 
 const mapStyle = [
@@ -86,7 +87,7 @@ const mapStyle = [
 ];
 
 const GoogleMapView = forwardRef<MapView, Props>(
-  ({location, Markers, onMarkerPress}, ref) => {
+  ({location, Markers, onMarkerPress, style}, ref) => {
     const region: Region = {
       latitude: location.latitude,
       longitude: location.longitude,
@@ -97,7 +98,7 @@ const GoogleMapView = forwardRef<MapView, Props>(
     return (
       <MapView
         ref={ref}
-        style={styles.container}
+        style={[styles.container, style]}
         provider={PROVIDER_GOOGLE}
         showsUserLocation
         followsUserLocation
@@ -109,7 +110,7 @@ const GoogleMapView = forwardRef<MapView, Props>(
             key={idx}
             coordinate={{latitude: coord.latitude, longitude: coord.longitude}}
             image={require('@/assets/icons/map_marker.png')}
-            onPress={() => onMarkerPress && onMarkerPress(coord)}
+            onPress={() => onMarkerPress?.(coord)}
           />
         ))}
       </MapView>
@@ -119,7 +120,11 @@ const GoogleMapView = forwardRef<MapView, Props>(
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
   },
 });
 

@@ -28,13 +28,16 @@ function AuthLocationScreen() {
         </Text>
       )}
       <View style={styles.mapContainer}>
-        <GoogleMapView
-          ref={mapRef}
-          location={{
-            latitude: userLocation.latitude,
-            longitude: userLocation.longitude,
-          }}
-        />
+        <View style={{width: '100%', height: '100%'}}>
+          <GoogleMapView
+            ref={mapRef}
+            location={{
+              latitude: userLocation.latitude,
+              longitude: userLocation.longitude,
+            }}
+          />
+        </View>
+
         <View style={styles.locContainer}>
           <Text style={styles.h3}>현재 나의 위치는 </Text>
           <Text style={styles.locText}>“청주시 서원구”</Text>
@@ -109,7 +112,7 @@ function AuthLocationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginVertical: 40,
+    paddingVertical: 40,
     justifyContent: 'center',
     gap: 80,
   },
@@ -127,9 +130,10 @@ const styles = StyleSheet.create({
     color: colors.GRAY_400,
   },
   mapContainer: {
-    gap: 10,
     justifyContent: 'center',
-    height: '50%',
+    alignItems: 'center',
+    gap: 12,
+    height: '48%',
   },
   buttonContainer: {
     marginHorizontal: 24,
