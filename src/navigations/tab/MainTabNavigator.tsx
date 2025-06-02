@@ -57,7 +57,7 @@ function MainTabNavigator() {
               style={{
                 width: TAB_ICON_SIZE,
                 height: TAB_ICON_SIZE,
-                ...(focused && {tintColor: colors.BLACK}), // focused일 때만 tintColor 적용
+                // ...(focused && {tintColor: colors.BLACK}), // focused일 때만 tintColor 적용
               }}
               resizeMode="contain"
             />
@@ -78,7 +78,7 @@ function MainTabNavigator() {
               style={{
                 width: TAB_ICON_SIZE,
                 height: TAB_ICON_SIZE,
-                ...(focused && {tintColor: colors.BLACK}), // focused일 때만 tintColor 적용
+                // ...(focused && {tintColor: colors.BLACK}), // focused일 때만 tintColor 적용
               }}
               resizeMode="contain"
             />
@@ -99,7 +99,7 @@ function MainTabNavigator() {
               style={{
                 width: TAB_ICON_SIZE,
                 height: TAB_ICON_SIZE,
-                ...(focused && {tintColor: colors.BLACK}), // focused일 때만 tintColor 적용
+                // ...(focused && {tintColor: colors.BLACK}), // focused일 때만 tintColor 적용
               }}
               resizeMode="contain"
             />

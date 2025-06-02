@@ -163,16 +163,19 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: colors.GRAY_200,
     marginHorizontal: 8,
+    borderWidth: 1,
+    borderColor: colors.GRAY_400,
   },
   filterBtnSelected: {
-    backgroundColor: colors.BLUE_400,
+    backgroundColor: colors.WHITE,
+    borderColor: colors.BLUE_400,
   },
   filterText: {
     color: colors.GRAY_800,
     fontWeight: 'bold',
   },
   filterTextSelected: {
-    color: colors.WHITE,
+    color: colors.BLUE_400,
   },
 });
 
