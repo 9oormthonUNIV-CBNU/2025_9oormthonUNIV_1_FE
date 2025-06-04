@@ -1,79 +1,100 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# CheongMaru Frontend 구조
 
-# Getting Started
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
-
-## Step 1: Start the Metro Server
-
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
-
-To start Metro, run the following command from the _root_ of your React Native project:
-
-```bash
-# using npm
-npm start
-
-# OR using Yarn
-yarn start
+## 1. 실제 폴더 구조
+```
+src/components/         # 재사용 UI 컴포넌트
+src/screens/auth/       # 인증 관련 화면
+src/screens/map/        # 지도 관련 화면
+src/screens/post/       # 게시판 관련 화면
+src/screens/mypage/     # 마이페이지 관련 화면
+src/constants/          # 상수, 타입, 네비게이션 이름 등
+src/api/                # axios 인스턴스 등 API 관련
+src/contexts/           # 전역 상태 관리
 ```
 
-## Step 2: Start your Application
+---
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+### 2. 요약
 
-### For Android
+- 인증 → 위치 인증 → 메인(지도/게시판/마이페이지)으로 이어지는 구조
+- 각 단계별로 화면(Screen)과 재사용 컴포넌트로 분리
+- 네비게이션은 Stack/Tab/Drawer로 계층화
+- 상태/토큰/유틸은 별도 파일로 관리
 
-```bash
-# using npm
-npm run android
+> 실제 코드와 플로우차트 모두 반영한 구조입니다.  
+> 각 컴포넌트/화면의 세부 구현은 `src/components/`, `src/screens/` 폴더에서 확인할 수 있습니다.
 
-# OR using Yarn
-yarn android
-```
+## 3. 앱 루트 구조
+- **App.tsx**
+  - QueryClientProvider
+    - AuthProvider
+      - NavigationContainer
+        - RootNavigator
 
-### For iOS
+## 4. 네비게이션 구조
+- **RootNavigator**
+  - 인증 스택: AuthStackNavigator
+    - AuthHomeScreen (카카오 로그인)
+      - KakaoLoginButton
+    - AuthLocationScreen (위치 인증)
+      - GoogleMapView 또는 KakaoMapView
+  - 메인 스택: RootStackNavigator
+    - 탭/드로어 네비게이션
+      - 지도
+        - MapHomeScreen
+        - MapInfoScreen
+      - 게시판
+        - PostHomeScreen
+        - PostPageScreen
+        - PostCreateScreen
+      - 마이페이지
+        - MyPageScreen
+        - 기타 마이페이지 관련 화면
 
-```bash
-# using npm
-npm run ios
+## 5. 주요 컴포넌트 계층
 
-# OR using Yarn
-yarn ios
-```
+### 인증 플로우
+- **AuthHomeScreen**
+  - KakaoLoginButton  
+    (카카오 로그인 WebView 모달, 로그인 성공 시 토큰 저장 및 위치 인증 화면으로 이동)
+- **AuthLocationScreen**
+  - GoogleMapView 또는 KakaoMapView  
+    (위치 인증 및 지도 표시)
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+### 메인/게시판/마이페이지
+- **MapHomeScreen**  
+  (지도 및 마커 표시)
+- **MapInfoScreen**  
+  (장소 상세 정보 표시)
+- **PostHomeScreen**  
+  (게시글 리스트)
+  - PostListItem
+- **PostPageScreen**  
+  (게시글 상세)
+  - LikeAndComment
+  - PostStats
+- **PostCreateScreen**  
+  (게시글 작성)
+- **MyPageScreen**  
+  (내 정보, 내 게시글 등)
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+### 공통 컴포넌트
+- CustomHeader
+- CustomButton
+- LikeAndComment
+- PostStats
 
-## Step 3: Modifying your App
+## 4. 상태 관리 및 유틸
+- AuthContext: 인증 상태 관리
+- tokenStorage: 토큰 저장/불러오기
+- axiosInstance: API 통신 (토큰 자동 포함)
+- useUserLocation: 위치 정보 훅
 
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+## 5. 전체 흐름 요약
+- 앱 실행 → 인증 여부 확인
+- 미인증 시:  
+  카카오 로그인 → 위치 인증 → 메인 네비게이션 진입
+- 인증 완료 시:  
+  메인(지도/게시판/마이페이지) 진입
+- 게시판/마이페이지 등에서 세부 기능 분기
