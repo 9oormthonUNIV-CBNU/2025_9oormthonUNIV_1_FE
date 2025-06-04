@@ -28,11 +28,21 @@ function AuthHomeScreen({navigation}: AuthHomeScreenProps) {
       style={styles.container}>
       <Image
         source={require('@/assets/icons/app_icon_800.png')}
-        style={{width: 180, height: 70}}
+        style={{width: 180, height: undefined, aspectRatio: 180 / 70}}
         resizeMode="contain"
       />
-      <Text style={styles.appName}>청마루</Text>
-      <Text style={styles.subtitle}>청마루에 오신 것을 환영합니다.</Text>
+      <Image
+        source={require('@/assets/청마루.png')}
+        style={{
+          width: 100,
+          height: undefined,
+          aspectRatio: 2,
+          marginBottom: 10,
+        }}
+        resizeMode="contain"
+      />
+      {/* <Text style={styles.appName}>청마루</Text> */}
+      <Text style={styles.subtitle}>청주 시민들을 위한 커뮤니티</Text>
       <View style={styles.buttonContainer}>
         <KakaoLoginButton />
       </View>
@@ -51,7 +61,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   appName: {
-    fontFamily: 'SOYO MAPLE BOLD',
+    fontFamily: 'SOYOMapleBold',
     color: '#222222',
     fontSize: 32,
     fontWeight: '700',
